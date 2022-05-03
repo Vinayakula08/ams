@@ -1,0 +1,51 @@
+<?php include 'connection.php';?>
+<?php
+if($_SERVER['REQUEST_METHOD']=='POST')
+{
+    $username = $_REQUEST['username'];
+    $password = $_REQUEST['password'];
+    $role = $_REQUEST['role'];
+    if($role=="ADMIN")
+        {
+        $query = "select * from admin where username = '$username' and password = '$password'";
+        $res = mysqli_query($conn,$query);
+        if(mysqli_num_rows($res)>=1)
+        {
+            session_start();
+            $_SESSION['auth']='true';
+            header('location:adminhome.php');
+        }
+        else{
+            echo 'Wrong username or password';
+        }
+    }
+    if($role=="FARMER")
+        {
+        $query = "select * from farmersregister where ppbno = '$username' and confirmpassword = '$password'";
+        $res = mysqli_query($conn,$query);
+        if(mysqli_num_rows($res)>=1)
+        {
+            session_start();
+            $_SESSION['auth']='true';
+            header('location:farmerhome.php');
+        }
+        else{
+            echo 'Wrong username or password';
+        }
+    }
+    if($role=="TRADER")
+        {
+        $query = "select * from traderregister where username = '$username' and password = '$password'";
+        $res = mysqli_query($conn,$query);
+        if(mysqli_num_rows($res)>=1)
+        {
+            session_start();
+            $_SESSION['auth']='true';
+            header('location:traderhome.php');
+        }
+        else{
+            echo 'Wrong username or password';
+        }
+    }
+}
+?>
