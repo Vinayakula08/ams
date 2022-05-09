@@ -42,19 +42,35 @@
         hr{
             color: whitesmoke;
         }
-        .container {
+        .container1 {
             background: #17A2b8;
             color: white;
             margin-top: 100px;
             padding: 20px;
             box-shadow: 0px 0px 10px 3px black;
         }
-       
-
-
-
-
-
+        .container{
+            margin-top: 10px;
+            margin-left: 20%;
+            margin-right: 30%;
+            margin-bottom:10px;
+            background: #54d4e8;
+        }
+        .sub{
+            margin-top:10px;
+            margin-left:15%;
+        }
+        .labels{
+            color:black;
+            font-size: large;
+        }
+        .inputs{
+            border-radius: 10px;
+            background-color:#f5f4ee;
+        }
+        .error{
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -92,7 +108,7 @@
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">Buyers</a>
+                            <a class="nav-link" href="#">Traders</a>
                         </div>
                         </li>
                         <li class="nav-item">
@@ -110,97 +126,190 @@
                 </div>
             </div>
         </nav>
+      <?php 
+    $month = date('m');
+    $day = date('d');
+    $year = date('Y');
+
+    $today = $day . '-' . $month . '-' . $year;
+    ?>
         <marquee behavior="scroll" direction="left" style="
         color: rgb(32, 70, 28);
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
-    <div class="container">
-        <h2 strond style="font-size: medium; color:black;">Feel free to contact us through this.</h2>
-        <hr>
-        Email<input type="email" name="Email" id="email" placeholder="12345@gmail.com">
-        Mobile Number<input type="text" name="Mobile number" id="number" placeholder="+91 0123456789">
-        <br>
-        
-        
-      <center> <label strong style="font-size:medium;color:black;">Provide us description about your problem</label></center> 
-                    <textarea class="form-control" id="message" rows="10"></textarea>
-                    <br>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        <?php
+// define variables and set to empty values
+$nameErr = $unameErr = $ageErr =  $genderErr = $mobilenumberErr = $gmailErr = $organisationErr = $newpasswordErr = $confirmpasswordErr = $addressErr = $pincodeErr = $stateErr = "";
+$name = $uname = $age =  $gender = $mobilenumber = $gmail = $organisation = $newpassword = $confirmpassword = $address = $pincode = $state = "";
 
-                    <div class="form-group">
-                      <center>  <button class="btn btn-primary" onclick="showDetails();">Submit</button></center>
-                    </div>
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (empty($_POST["name"])) {
+    $nameErr = "Name is required";
+  } else {
+    $name = test_input($_POST["name"]);
+    if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+      $nameErr = "Only letters and white space allowed";
+    }
+  }
+  
+  if (empty($_POST["username"])) {
+    $unameErr = "Username is required";
+  } else {
+    $uname = test_input($_POST["username"]);
+    if (!preg_match("/^[a-zA-Z-']*$/",$uname)) {
+      $unameErr = "Only letters";
+    }
+  }
+  
+  if (empty($_POST["age"])) {
+    $ageErr = "Age is required";
+  } else {
+    $age = test_input($_POST["age"]);
+    if (!preg_match("/^[0-9]*$/",$age)) {
+      $ageErr = "Only numbers";
+    }
+  }
 
-     <div style="color: black;">
-         Contact us On :<br>
-         Telephone : 040-235642<br>
-         Email : agrimarketwgl@gmail.com
-     </div>
+  if (empty($_POST["mobilenumber"])) {
+    $mobilenumberErr = "Mobilenumber is required";
+  } else {
+    $mobilenumber = test_input($_POST["mobilenumber"]);
+    if (!preg_match("/^[0-9]*$/",$mobilenumber)) {
+      $mobilenumberErr = "Only numbers";
+    }
+  }
 
-     </div>
-     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">User Login</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Username</span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Password</span>
-                        </div>
-                        <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
-                    </div>
-                    <input type="radio" id="admin" name="fav_language" value="ADMIN">
-                      <label for="admin">ADMIN</label>
-                      <input type="radio" id="trader" name="fav_language" value="TRADER">
-                      <label for="trader">TRADER</label>
-                      <input type="radio" id="farmer" name="fav_language" value="FARMER">
-                      <label for="farmer">FARMER</label><br>
-                    <input type="checkbox" name="me"> Remember Me
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Login</button>
-                </div>
-            </div>
-        </div>
-    </div>
+  if (empty($_POST["gmail"])) {
+    $gmailErr = "Email is required";
+  } else {
+    $gmail = test_input($_POST["gmail"]);
+    if (!filter_var($gmail, FILTER_VALIDATE_EMAIL)) {
+      $emailErr = "Invalid email format";
+    }
+  }
 
-<footer>
-    <div class="container">
-        <p style="color: black;">@copyrights 2021 AMS.All Rights Reserved.</p>
-    </div>
-</footer>
-   
+  if (empty($_POST["organisation"])) {
+    $organisationErr = "";
+  } else {
+    $organisation = test_input($_POST["organisation"]);
+  }
 
 
+  if (empty($_POST["newpassword"])) {
+    $newpasswordErr = "New Password cannot be Empty";
+  } else {
+    $newpassword = test_input($_POST["newpassword"]);
+  }
 
-    <script>
-        function showDetails() {
-            alert("Your query has been successfully submitted. Our team will respond as soon as possible");
-            
-            var email = document.getElementById("email").value;
-            console.log("Entered Email ID is: " + email);
-            var number = document.getElementById("number").value;
-            console.log("Entered Mobile Number is: " + number);
-            var message = document.getElementById("message").value;
-            console.log("description is: " + message);
-        }
-    </script>
+  if (empty($_POST["confirmpassword"])) {
+    $confirmpasswordErr = "confirm Password cannot be Empty";
+  } else {
+    $confirmpassword = test_input($_POST["confirmpassword"]);
+  }
 
+  if($confirmpassword!=$newpassword){
+    $confirmpasswordErr = "new Password and confirm password must be same";
+  }
 
+  if (empty($_POST["address"])) {
+    $addressErr = "";
+  } else {
+    $address = test_input($_POST["address"]);
+  }
 
+  if (empty($_POST["pincode"])) {
+    $pincodeErr = "";
+  } else {
+    $pincode = test_input($_POST["pincode"]);
+  }
 
+  if (empty($_POST["state"])) {
+    $stateErr = "";
+  } else {
+    $state = test_input($_POST["state"]);
+  }
+  if (empty($_POST["gender"])) {
+    $genderErr = "Gender is required";
+  } else {
+    $gender = test_input($_POST["gender"]);
+  }
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
+
+<div class="container">
+  <p><span class="error">* required field</span></p>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
+<table>
+  <tr><td>
+  Name:</td><td> <input type="text" name="name" class="inputs">
+  <span class="error">* <?php echo $nameErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+<tr><td>
+  Username:</td><td>  <input type="text" name="username" class="inputs">
+  <span class="error">* <?php echo $unameErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+ <tr><td>
+  Age:</td><td>  <input type="text" name="age" class="inputs">
+  <span class="error"><?php echo $ageErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+  <tr><td>
+  Gender:</td><td> 
+  <input type="radio" name="gender" value="Female">Female
+  <input type="radio" name="gender" value="Male">Male
+  <input type="radio" name="gender" value="Other">Other
+  <span class="error">* <?php echo $genderErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+<tr><td>
+  Mobile Number: </td><td> <input type="text" name="mobilenumber" class="inputs">
+  <span class="error">*<?php echo $mobilenumberErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+ <tr><td>
+  Gmail:</td><td> <input type="text" name="gmail" class="inputs">
+  <span class="error">*<?php echo $gmailErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+  <tr><td>
+  Organisation:</td><td> <input type="text" name="organisation" class="inputs">
+  <span class="error">*<?php echo $organisationErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+<tr><td>
+  New Password:</td><td> <input type="password" name="newpassword" class="inputs">
+  <span class="error">*<?php echo $newpasswordErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+  <tr><td>
+  Confirm Password:</td><td> <input type="password" name="confirmpassword" class="inputs">
+  <span class="error">*<?php echo $confirmpasswordErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+ <tr><td>
+  Address:</td><td>  <input type="text" name="address" class="inputs">
+  <span class="error">*<?php echo $addressErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+<tr><td>
+  Pincode: </td><td> <input type="text" name="pincode" class="inputs">
+  <span class="error">*<?php echo $pincodeErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+  <tr><td>
+  State:</td><td>  <input type="text" name="state" class="inputs">
+  <span class="error">*<?php echo $stateErr;?></span></td>
+</tr>
+  
+</table>
+  <input type="submit" name="submit" value="Submit" class="sub">  
+</form>
+</div>
+<?php include 'connection.php'?>
+<?php
+    
+      $query = "INSERT INTO `tradersregister` (`name`, `username`, `age`, `gender`, `mobilenumber`, `gmail`, `organisatoin`, `newpassword`, `confirmpassword`, `address`, `pincode`, `state`, `traderregisteredon`) VALUES ('$name', '$uname', '$age', '$gender', '$mobilenumber', '$gmail', '$organisation', '$newpassword', '$confirmpassword', '$address', '$pincode', '$state', current_timestamp())";
+      $res = mysqli_query($conn,$query);
+?>
 </body>
 </html>

@@ -104,12 +104,19 @@ body{
             </div>
         </div>
     </nav>
+    <?php 
+    $month = date('m');
+    $day = date('d');
+    $year = date('Y');
+
+    $today = $day . '-' . $month . '-' . $year;
+    ?>
     <marquee behavior="scroll" direction="left" style="
     color: rgb(32, 70, 28);
     font-weight: bold;
     background: #49c3d6;margin-bottom: 0;
     padding: 10px 0 10px;
-    font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+    font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
     <br>
     <div class="row mx-0 my-4 ">
            <div class="col mr-sm-2 pd-25 text-white text-center rounded bg1">

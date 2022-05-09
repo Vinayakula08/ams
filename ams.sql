@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2022 at 07:19 PM
+-- Generation Time: May 05, 2022 at 05:54 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -66,6 +66,14 @@ CREATE TABLE `farmersregister` (
   `farmer_registered_on` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `farmersregister`
+--
+
+INSERT INTO `farmersregister` (`ppbno`, `name`, `age`, `gender`, `mobilenumber`, `village`, `mandal`, `district`, `state`, `createpassword`, `confirmpassword`, `farmer_registered_on`) VALUES
+('', '', 0, '', 0, '', '', '', '', '', '', '2022-05-03 14:08:00'),
+('T23060110123', '', 20, 'Male', 7032073722, 'siddenki', 'jangaon', 'Jangaon', 'Telangana', 'vinay', 'vinay', '2022-05-03 11:42:30');
+
 -- --------------------------------------------------------
 
 --
@@ -87,6 +95,13 @@ CREATE TABLE `tradersregister` (
   `state` varchar(100) NOT NULL,
   `traderregisteredon` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tradersregister`
+--
+
+INSERT INTO `tradersregister` (`name`, `username`, `age`, `gender`, `mobilenumber`, `gmail`, `organisatoin`, `newpassword`, `confirmpassword`, `address`, `pincode`, `state`, `traderregisteredon`) VALUES
+('Vinay Kumar Akula', 'vinayakula21', 20, 'Male', 7032073722, 'vinaykumar68375@gmail.com', 'akulas limited', 'vinay', 'vinay', 'H.NO:3-8,SIDDENKI,JANGAON,506201', 506201, 'Telangana', '2022-05-03 17:43:37');
 
 --
 -- Indexes for dumped tables

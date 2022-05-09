@@ -131,12 +131,12 @@ img{
                         <li class="nav-item active">
                             <div class="zoom">
                             
-                            <a class="nav-link" href="home.html"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+                            <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="farmers.html"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
+                            <a class="nav-link" href="farmers.php"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
                         </div>
                         </li>
                         <li class="nav-item">
@@ -164,7 +164,7 @@ img{
                     </ul>
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="contactus.html"><i class="fa fa-address-card" aria-hidden="true"></i>
+                            <a class="nav-link" href="contactus.php"><i class="fa fa-address-card" aria-hidden="true"></i>
                                 Contact Us</a>
                         </li>
                         <li class="nav-item">
@@ -182,12 +182,19 @@ img{
                 </div>
             </div>
         </nav>
+        <?php 
+    $month = date('m');
+    $day = date('d');
+    $year = date('Y');
+
+    $today = $day . '-' . $month . '-' . $year;
+    ?>
         <marquee behavior="scroll" direction="left" style="
         color: rgb(32, 70, 28);
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
         <br>	<div class="container"><div class="quick-links-btn-sec pull-left"> 
                 <div class="quick-link-list " style="border-radius: 10%;">
                     <ul>
