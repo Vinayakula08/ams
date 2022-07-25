@@ -13,7 +13,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         {
             session_start();
             $_SESSION['auth']='true';
-            header('location:adminhome.php');
+            header('location:admindashboard.php');
         }
         else{
             echo 'Wrong username or password';
@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         {
             session_start();
             $_SESSION['auth']='true';
-            header('location:farmerhome.php');
+            header('location:farmerdashboard.php');
         }
         else{
             echo 'Wrong username or password';
@@ -41,7 +41,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         {
             session_start();
             $_SESSION['auth']='true';
-            header('location:traderhome.php');
+            header('location:traderdashboard.php');
         }
         else{
             echo 'Wrong username or password';

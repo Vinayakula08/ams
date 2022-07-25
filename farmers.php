@@ -58,12 +58,12 @@ body{
                     <li class="nav-item active">
                         <div class="zoom">
                         
-                        <a class="nav-link" href="home.html"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+                        <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
                         </div>
                     </li>
                     <li class="nav-item">
                         <div class="zoom">
-                        <a class="nav-link" href="farmers.html"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
+                        <a class="nav-link" href="farmers.php"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
                     </div>
                     </li>
                     <li class="nav-item">
@@ -91,7 +91,7 @@ body{
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="contactus.html"><i class="fa fa-address-card" aria-hidden="true"></i>
+                        <a class="nav-link" href="contactus.php"><i class="fa fa-address-card" aria-hidden="true"></i>
                             Contact Us</a>
                     </li>
                     </li>
@@ -117,6 +117,7 @@ body{
     background: #49c3d6;margin-bottom: 0;
     padding: 10px 0 10px;
     font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+    <form action = "farmerlogin.php" method = "post">    
     <br>
     <div class="row mx-0 my-4 ">
            <div class="col mr-sm-2 pd-25 text-white text-center rounded bg1">
@@ -138,7 +139,7 @@ body{
                                     <span class="input-group-text" id="basic-addon1"  style="color: black;">Username</span>
                                 </div>
                                 <div class="input-group-prepend">
-                                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" placeholder="Username" name= "username" aria-label="Username" aria-describedby="basic-addon1">
                             </div>
                             </div>
                             <div class="input-group mb-3">
@@ -146,19 +147,22 @@ body{
                                     <span class="input-group-text" id="basic-addon1">Password</span>
                                 </div>
                                 <div class="input-group-prepend">
-                                <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+                                <input type="password" class="form-control" placeholder="Password" name= "password" aria-label="Password" aria-describedby="basic-addon1">
                                
                             </div>  
                             </div>
                         </div>
+                        
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Login</button>
-                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="farmerlogin.php" method="post">
+                        <button type="submit" class="btn btn-primary"  onclick="farmerlogin.php">Login</button>
+                    </form>
+                    </div>
                     </div>
                 </div>
             </div>
-             
+    </form>
            </div> </div>
            
            <footer>
