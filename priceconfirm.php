@@ -1,13 +1,13 @@
+<?php include 'connection.php';?>
 <?php
-// Start the session
-session_start();
-?>
+    session_start();
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agriculture Market | Farmers</title>
+    <title>Agriculture Market | Conatctus</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -19,6 +19,7 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <style>
+        
        body{
            
            overflow-x: hidden; 
@@ -29,28 +30,6 @@ session_start();
  background-size: cover;
            
        }
-       button{
-            width: 200px;
-        }
-.input{
-  text-align: center;
-  margin: 100px auto;
-}
-
-
-
-
-input{
-  width: 600px;
-  height: 55px;
-  padding: 5px 10px;
-  background: #e7e7e7;
-  border: none;
-  border-radius: 1px;
-  font-family: "Nunito",sans-serif;
-  font-weight:bold;
-  font-size: 20px;
-}
        .zoom:hover{
           transform:scale(1.1);
       }
@@ -62,6 +41,9 @@ input{
 
    
 }
+button{
+            width: 200px;
+        }
         h2,h3{
             text-align: center;
         }
@@ -75,15 +57,7 @@ input{
             padding: 20px;
             box-shadow: 0px 0px 10px 3px black;
         }
-        table,th,td{
-            border:2px solid black;
-            margin:20px 410px;
-        }
-        th,td 
-        {
-            padding:20px;
-
-        }
+       
 
 
 
@@ -144,45 +118,46 @@ input{
                 </div>
             </div>
         </nav>
+        <?php 
+    $month = date('m');
+    $day = date('d');
+    $year = date('Y');
+
+    $today = $day . '-' . $month . '-' . $year;
+    ?>
         <marquee behavior="scroll" direction="left" style="
         color: rgb(32, 70, 28);
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
-        <?php include 'connection.php';?>
-    <table>
-        <thead>
-            <tr>
-                <th>Pattadhar Passbook Number  </th>
-                <th>Product Id  </th>
-                <th>Product name  </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-                $query = "select farmersregister.ppbno, productdetails.pid, productdetails.productname from farmersregister,productdetails where farmersregister.ppbno=productdetails.ppbno";
-                $result=mysqli_query($conn,$query);
-                if ($result->num_rows > 0):
-                while($array=mysqli_fetch_row($result)):?>
-                <tr>
-                    <td><?php echo $array[0];?></td>
-                    <td><?php echo $array[1];?></td>
-                    <td><?php echo $array[2];?></td>
-                </tr>
-                <?php endwhile; ?>
-                <?php endif; ?>
-        </tbody>
-    </table>   
-    <form action="farmerdashboard2.php" method="post">
-        <center><input type="number" name="pid" placeholder="Enter product id you want to view" id="city-input">
-        <button class="btn btn-info ml-4" type="submit">Search</button></center>
-    </form>
-        <!-- <h1>welcome to farmershome page</h1> -->
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        <br>
+        <br>
+
+        
+<center><div><?php
+    $tid="";
+    $price = $_POST['traderprice'];
+    $pid=$_POST['pid1'];
+    if(isset($_SESSION['tid'])){
+        $tid = $_SESSION['tid'];
+        
+    }
+    
+    echo "<button  ><a href='trader.php'>Click here to revisit to trader login</a></buttton>";
+    $query="insert into pricedetails values ('$tid','$pid',$price)";
+    $result=mysqli_query($conn,$query);
+    if($result){
+        echo '<script>alert("Successfully inserted")</script>';
+    }
+    ?>
+    </div></center>
+
 <footer>
     <div class="container">
         <p style="color: black;">@copyrights 2021 AMS.All Rights Reserved.</p>
     </div>
 </footer>
+
 </body>
 </html>

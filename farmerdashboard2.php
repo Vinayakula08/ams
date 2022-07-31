@@ -1,13 +1,15 @@
-<?php
-// Start the session
-session_start();
+<?php include 'connection.php'
 ?>
+<?php
+    session_start();
+    ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agriculture Market | Farmers</title>
+    <title>Agriculture Market | Conatctus</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -29,28 +31,6 @@ session_start();
  background-size: cover;
            
        }
-       button{
-            width: 200px;
-        }
-.input{
-  text-align: center;
-  margin: 100px auto;
-}
-
-
-
-
-input{
-  width: 600px;
-  height: 55px;
-  padding: 5px 10px;
-  background: #e7e7e7;
-  border: none;
-  border-radius: 1px;
-  font-family: "Nunito",sans-serif;
-  font-weight:bold;
-  font-size: 20px;
-}
        .zoom:hover{
           transform:scale(1.1);
       }
@@ -151,17 +131,20 @@ input{
         padding: 10px 0 10px;
         font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
         <?php include 'connection.php';?>
-    <table>
+        <table>
         <thead>
             <tr>
                 <th>Pattadhar Passbook Number  </th>
                 <th>Product Id  </th>
                 <th>Product name  </th>
+                <th>Product price  </th>
+                <th>Confirm  </th>
             </tr>
         </thead>
         <tbody>
             <?php 
-                $query = "select farmersregister.ppbno, productdetails.pid, productdetails.productname from farmersregister,productdetails where farmersregister.ppbno=productdetails.ppbno";
+                $pid = $_REQUEST['pid'];
+                $query = "select x.ppbno, x.pid, x.productname, max(y.price) from productdetails x, pricedetails y where x.pid=y.pid and y.pid=$pid;";
                 $result=mysqli_query($conn,$query);
                 if ($result->num_rows > 0):
                 while($array=mysqli_fetch_row($result)):?>
@@ -169,15 +152,20 @@ input{
                     <td><?php echo $array[0];?></td>
                     <td><?php echo $array[1];?></td>
                     <td><?php echo $array[2];?></td>
+                    <td><?php echo $array[3];?></td>
+                    <?php 
+                        //session_start();
+                        $_SESSION['pid'] = $array[1];
+                        $_SESSION['ppbno'] = $array[0];
+                        $_SESSION['price'] = $array[3];
+                    ?>
+                    <td><form action="final.php" method="post"><input type="submit" name="submit1" value="confirm" ></form></td>
                 </tr>
                 <?php endwhile; ?>
                 <?php endif; ?>
         </tbody>
-    </table>   
-    <form action="farmerdashboard2.php" method="post">
-        <center><input type="number" name="pid" placeholder="Enter product id you want to view" id="city-input">
-        <button class="btn btn-info ml-4" type="submit">Search</button></center>
-    </form>
+    </table> 
+
         <!-- <h1>welcome to farmershome page</h1> -->
 <footer>
     <div class="container">

@@ -85,7 +85,9 @@ input{
 
         }
 
-
+        .table1{
+            margin : 3% 20%;
+        }
 
 
 
@@ -151,17 +153,24 @@ input{
         padding: 10px 0 10px;
         font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
         <?php include 'connection.php';?>
-    <table>
+    <table class="table1">
         <thead>
             <tr>
-                <th>Pattadhar Passbook Number  </th>
+                
                 <th>Product Id  </th>
                 <th>Product name  </th>
+                <th>Farmer name  </th>
+                <th>Pattadhar Passbook Number  </th>
+                <th>Trader id  </th>
+                <th>Trader name  </th>
+                <th>Organisation  </th>
+                <th>Price  </th>
+                <th>Product sold on  </th>
             </tr>
         </thead>
         <tbody>
             <?php 
-                $query = "select farmersregister.ppbno, productdetails.pid, productdetails.productname from farmersregister,productdetails where farmersregister.ppbno=productdetails.ppbno";
+                $query = "select * from allproducts";
                 $result=mysqli_query($conn,$query);
                 if ($result->num_rows > 0):
                 while($array=mysqli_fetch_row($result)):?>
@@ -169,15 +178,17 @@ input{
                     <td><?php echo $array[0];?></td>
                     <td><?php echo $array[1];?></td>
                     <td><?php echo $array[2];?></td>
+                    <td><?php echo $array[3];?></td>
+                    <td><?php echo $array[4];?></td>
+                    <td><?php echo $array[5];?></td>
+                    <td><?php echo $array[6];?></td>
+                    <td><?php echo $array[7];?></td>
+                    <td><?php echo $array[8];?></td>
                 </tr>
                 <?php endwhile; ?>
                 <?php endif; ?>
         </tbody>
-    </table>   
-    <form action="farmerdashboard2.php" method="post">
-        <center><input type="number" name="pid" placeholder="Enter product id you want to view" id="city-input">
-        <button class="btn btn-info ml-4" type="submit">Search</button></center>
-    </form>
+    </table> 
         <!-- <h1>welcome to farmershome page</h1> -->
 <footer>
     <div class="container">

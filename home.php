@@ -158,7 +158,7 @@ img{
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">About us</a>
+                            <a class="nav-link" href="aboutus.php">About us</a>
                             </div>
                         </li>
                     </ul>

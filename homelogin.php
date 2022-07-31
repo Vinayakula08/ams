@@ -35,9 +35,9 @@ if($_SERVER['REQUEST_METHOD']=='POST')
     }
     if($role=="TRADER")
         {
-        $query = "select * from traderregister where username = '$username' and password = '$password'";
+        $query = "select * from tradersregister where username = '$username' and confirmpassword = '$password'";
         $res = mysqli_query($conn,$query);
-        if(mysqli_num_rows($res)>=1)
+        if($res)
         {
             session_start();
             $_SESSION['auth']='true';

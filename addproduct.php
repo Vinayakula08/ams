@@ -1,3 +1,4 @@
+<?php include 'connection.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,19 +43,35 @@
         hr{
             color: whitesmoke;
         }
-        .container {
+        .container1 {
             background: #17A2b8;
             color: white;
             margin-top: 100px;
             padding: 20px;
             box-shadow: 0px 0px 10px 3px black;
         }
-       
-
-
-
-
-
+        .container{
+            margin-top: 10px;
+            margin-left: 20%;
+            margin-right: 30%;
+            margin-bottom:10px;
+            background: #54d4e8;
+        }
+        .sub{
+            margin-top:10px;
+            margin-left:15%;
+        }
+        .labels{
+            color:black;
+            font-size: large;
+        }
+        .inputs{
+            border-radius: 10px;
+            background-color:#f5f4ee;
+        }
+        .error{
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -92,13 +109,13 @@
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">Buyers</a>
+                            <a class="nav-link" href="trader.php">Traders</a>
                         </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
 
-                            <a class="nav-link" href="#">Admin</a>
+                            <a class="nav-link" href="admin.php">Admin</a>
                             </div>
                         </li>
                         <li class="nav-item">
@@ -110,27 +127,141 @@
                 </div>
             </div>
         </nav>
+    <?php 
+    $month = date('m');
+    $day = date('d');
+    $year = date('Y');
+
+    $today = $day . '-' . $month . '-' . $year;
+    ?>
         <marquee behavior="scroll" direction="left" style="
         color: rgb(32, 70, 28);
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
-        <a href="farmerregister.php" >
-             <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-               <b>Register Farmer</b></button> </a>
-        <a href="traderregister.php" >
-            <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        <b>Register Trader</b></button> </a>
-        <a href="check.php" >
-            <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        <b>Check Product</b></button> </a>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        <?php
+// define variables and set to empty values
+$pidErr = $pnameErr =  $qualityErr = $quantityErr = $moistureErr = $mspErr = $ppbnoErr =  "";
+$pid = $pname =  $quality = $quantity= $moisture = $msp = $ppbno =  "";
 
-<footer>
-    <div class="container">
-        <p style="color: black;">@copyrights 2021 AMS.All Rights Reserved.</p>
-    </div>
-</footer>
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (empty($_POST["pid"])) {
+    $pidErr = "pid is required";
+  } else {
+    $pid = test_input($_POST["pid"]);
+  }
+  
+  if (empty($_POST["pname"])) {
+    $pnameErr = "pname is required";
+  } else {
+    $pname = test_input($_POST["pname"]);
+  }
 
+  if (empty($_POST["quality"])) {
+    $qualityErr = "quality is required";
+  } else {
+    $quality = test_input($_POST["quality"]);
+  }
+
+
+  if (empty($_POST["quantity"])) {
+    $quantityErr = "quantity is required";
+  } else {
+    $quantity = test_input($_POST["quantity"]);
+  }
+
+  if (empty($_POST["moisture"])) {
+    $moistureErr = "moisture is required";
+  } else {
+    $moisture = test_input($_POST["moisture"]);
+  }
+  
+  if (empty($_POST["msp"])) {
+    $mspErr = "msp is required";
+  } else {
+    $msp = test_input($_POST["msp"]);
+  }
+
+  if (empty($_POST["ppbno"])) {
+    $ppbnoErr = "ppbno is required";
+  } else {
+    $ppbno = test_input($_POST["ppbno"]);
+    $query = "select * from farmersregister where ppbno = '$ppbno'";
+    $res = mysqli_query($conn,$query);
+    if(mysqli_num_rows($res)>=1)
+    {
+    }
+    else{
+      $ppbnoErr = "Farmer not registered";
+    }
+  }
+  
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
+
+<div class="container">
+  <p><span class="error">* required field</span></p>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
+<table>
+  <tr><td>
+  Product id:</td><td> <input type="number" name="pid" class="inputs">
+  <span class="error">* <?php echo $pidErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+
+ <tr><td>
+ Product name:</td><td>  <input type="text" name="pname" class="inputs">
+  <span class="error"><?php echo $pnameErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+  
+<tr><td>
+  Quantity: </td><td> <input type="text" name="quantity" class="inputs" placeholder="in kilograms">
+  <span class="error">*<?php echo $quantityErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+
+<tr><td>
+  Quality: </td><td> <input type="text" name="quality" class="inputs" >
+  <span class="error">*<?php echo $qualityErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+<tr><td>
+
+ <tr><td>
+  Moisture :</td><td> <input type="text" name="moisture" class="inputs">
+  <span class="error">*<?php echo $moistureErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+
+<tr><td>
+  Msp :</td><td> <input type="text" name="msp" class="inputs">
+  <span class="error">*<?php echo $mspErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+
+<tr><td>
+  Farmer Id :</td><td> <input type="text" name="ppbno" class="inputs" placeholder="PPB NUMBER">
+  <span class="error">*<?php echo $ppbnoErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+
+
+  
+</table>
+  <input type="submit" name="submit" value="Submit" class="sub">  
+</form>
+</div>
+<?php include 'connection.php'?>
+<?php
+    
+      $query = "INSERT INTO `productdetails` (`pid`, `productname`, `quantity`, `quality`, `moisture`, `msp`, `ppbno` ) VALUES ('$pid', '$pname', '$quality', '$quantity', '$moisture', '$msp', '$ppbno')";
+      $res = mysqli_query($conn,$query);
+      if($res)
+      {
+        echo '<script>alert("Successfully inserted")</script>';
+      }
+?>
 </body>
 </html>
