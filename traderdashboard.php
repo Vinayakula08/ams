@@ -1,3 +1,10 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['traderusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,7 +57,15 @@
             box-shadow: 0px 0px 10px 3px black;
         }
        
+        table,th,td{
+            border:2px solid black;
+            margin:20px 410px;
+        }
+        th,td 
+        {
+            padding:20px;
 
+        }
 
 
 
@@ -66,8 +81,8 @@
           <div class="col-lg-8 col-sm-3">
   <center>
       <div style="text-decoration-style: wavy;color: rgb(165, 15, 15);display: inline;">
-      <h1 style="color: rgb(5, 119, 5);">Agriculture Marketing System</h1>
-      <h3 style="color: rgb(13, 95, 37);">Warangal,Telangana</h3>
+      <h1 style="color: rgb(5, 119, 5);margin-left:0px">Agriculture Marketing System</h1>
+      <h3 style="color: rgb(13, 95, 37);margin-left:0px">Warangal,Telangana</h3>
      </div></center>
   </div>
   </div>
@@ -82,23 +97,23 @@
                         <li class="nav-item active">
                             <div class="zoom">
                             
-                            <a class="nav-link" href="home.html"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+                            <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="farmers.html"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
+                            <a class="nav-link" href="farmers.php"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
                         </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">Buyers</a>
+                            <a class="nav-link" href="trader.php">Buyers</a>
                         </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
 
-                            <a class="nav-link" href="#">Admin</a>
+                            <a class="nav-link" href="admin.php">Admin</a>
                             </div>
                         </li>
                         <li class="nav-item">
@@ -107,6 +122,15 @@
                             </div>
                         </li>
                     </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['traderusername']?> 
+                            </a></b>
+                        </li>
+                    </ul>
+
+
                 </div>
             </div>
         </nav>
@@ -124,7 +148,41 @@
         padding: 10px 0 10px;
         font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
 
-        <h1>welcome to tradeshome page</h1>
+<?php include 'connection.php';?>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Id  </th>
+                <th>Product name  </th>
+                <th>Quantity  </th>
+                <th>Quality  </th>
+                <th>Moisture  </th>
+                <th>Msp </th>
+                <th>Your Price  </th>
+                <th>Confirm  </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+                $query = "select *from productdetails";
+                $result=mysqli_query($conn,$query);
+                if ($result->num_rows > 0):
+                while($array=mysqli_fetch_row($result)):?>
+                <tr>
+                    <td><?php echo $array[0];?></td>
+                    <td><?php echo $array[1];?></td>
+                    <td><?php echo $array[2];?></td>
+                    <td><?php echo $array[3];?></td>
+                    <td><?php echo $array[4];?></td>
+                    <td><?php echo $array[5];?></td>
+                    <td><form action="priceconfirm.php" method="post"><input type="text" name="traderprice"><input type="text"  name="pid1" value="<?php echo $array[0]?>" style="background-color:aliceblue;color:aliceblue;;border:0" onclick="border:0"></td>
+                    <td><input type="submit" name="submit1"></form></td>
+                </tr>
+                <?php endwhile; ?>
+                <?php endif; ?>
+        </tbody>
+    </table>    
+    
 <footer>
     <div class="container">
         <p style="color: black;">@copyrights 2021 AMS.All Rights Reserved.</p>

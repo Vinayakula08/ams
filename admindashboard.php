@@ -1,3 +1,10 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['adminusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +56,9 @@
             padding: 20px;
             box-shadow: 0px 0px 10px 3px black;
         }
-       
+        .navbar-nav {
+            margin-left: auto;
+        }
 
 
 
@@ -106,10 +115,23 @@
                             <a class="nav-link" href="#">About us</a>
                             </div>
                         </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="#">About us</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['adminusername']?> 
+                            </a></b>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        
         <?php 
     $month = date('m');
     $day = date('d');
@@ -123,15 +145,22 @@
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
         font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
-        <a href="farmerregister.php" >
+        <br>
+        <br>
+
+        <center><a href="farmerregister.php" >
              <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                <b>Register Farmer</b></button> </a>
         <a href="traderregister.php" >
             <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         <b>Register Trader</b></button> </a>
-        <a href="check.php" >
+        <a href="addproduct.php" >
             <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        <b>Check Product</b></button> </a>
+        <b>check and add Product</b></button> </a>
+        <a href="viewallproducts.php" >
+            <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        <b>View all products till date</b></button> </a>
+    </center>
 
 <footer>
     <div class="container">

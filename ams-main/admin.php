@@ -117,7 +117,7 @@ body{
     background: #49c3d6;margin-bottom: 0;
     padding: 10px 0 10px;
     font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton MSP:Rs.6155  || Paddy MSP:1300 || Maize MSP:Rs.1621 </marquee>
-    <form action = "farmerlogin.php" method = "post">    
+    <form action = "adminlogin.php" method = "post">    
     <br>
     <div class="row mx-0 my-4 ">
            <div class="col mr-sm-2 pd-25 text-white text-center rounded bg1">
@@ -137,7 +137,7 @@ body{
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"  style="color: black;">Username</span>
-                                </div>
+                                </div> 
                                 <div class="input-group-prepend">
                                 <input type="text" class="form-control" placeholder="Username" name= "username" aria-label="Username" aria-describedby="basic-addon1">
                             </div>
@@ -155,8 +155,8 @@ body{
                         
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <form action="farmerlogin.php" method="post">
-                        <button type="submit" class="btn btn-primary"  onclick="farmerlogin.php">Login</button>
+                        <form action="adminlogin.php" method="post">
+                        <button type="submit" class="btn btn-primary"  onclick="adminlogin.php">Login</button>
                     </form>
                     </div>
                     </div>

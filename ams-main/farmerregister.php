@@ -1,11 +1,3 @@
-<?php 
-    session_start();
-    if(!isset($_SESSION['adminusername'])){
-        header("location:home.php");
-        exit();
-    }
-?> 
-<?php include 'connection.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,17 +123,10 @@
                             </div>
                         </li>
                     </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                           <b> <a class="nav-link" href="destroysessions.php">
-                               Logout <?php echo $_SESSION['adminusername']?> 
-                            </a></b>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </nav>
-      <?php 
+    <?php 
     $month = date('m');
     $day = date('d');
     $year = date('Y');
@@ -156,22 +141,10 @@
         font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
         <?php
 // define variables and set to empty values
-$nameErr = $tidErr = $unameErr = $ageErr =  $genderErr = $mobilenumberErr = $gmailErr = $organisationErr = $newpasswordErr = $confirmpasswordErr = $addressErr = $pincodeErr = $stateErr = "";
-$name = $tid = $uname = $age =  $gender = $mobilenumber = $gmail = $organisation = $newpassword = $confirmpassword = $address = $pincode = $state = "";
+$nameErr = $ageErr =  $genderErr = $mobilenumberErr= $ppbnoErr = $villageErr = $mandalErr= $districtErr = $stateErr = $newpasswordErr = $confirmpasswordErr = "";
+$name = $age =  $gender = $mobilenumber = $ppbno = $village = $mandal = $district = $state = $newpassword = $confirmpassword = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-  if (empty($_POST["tid"])) {
-    $tidErr = "Trader Id required";
-  } else {
-    $tid = test_input($_POST["tid"]);
-    $query = "select * from tradersregister where tid = '$tid'";
-    $res = mysqli_query($conn,$query);
-    if(mysqli_num_rows($res)>=1){
-      $tidErr = "Trader Id already used, please try with another one";
-    }
-  }
-
   if (empty($_POST["name"])) {
     $nameErr = "Name is required";
   } else {
@@ -181,14 +154,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
   
-  if (empty($_POST["username"])) {
-    $unameErr = "Username is required";
-  } else {
-    $uname = test_input($_POST["username"]);
-    if (!preg_match("/^[a-zA-Z-']*$/",$uname)) {
-      $unameErr = "Only letters";
-    }
-  }
   
   if (empty($_POST["age"])) {
     $ageErr = "Age is required";
@@ -197,6 +162,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!preg_match("/^[0-9]*$/",$age)) {
       $ageErr = "Only numbers";
     }
+  }
+
+  if (empty($_POST["gender"])) {
+    $genderErr = "Gender is required";
+  } else {
+    $gender = test_input($_POST["gender"]);
+  }
+
+  if (empty($_POST["ppbno"])) {
+    $ppbnoErr = "Pattadhar PassBook Number is Required.";
+  } else {
+    $ppbno = test_input($_POST["ppbno"]);
   }
 
   if (empty($_POST["mobilenumber"])) {
@@ -208,21 +185,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
-  if (empty($_POST["gmail"])) {
-    $gmailErr = "Email is required";
+  if (empty($_POST["village"])) {
+    $villageErr = "Village is required";
   } else {
-    $gmail = test_input($_POST["gmail"]);
-    if (!filter_var($gmail, FILTER_VALIDATE_EMAIL)) {
-      $emailErr = "Invalid email format";
-    }
+    $village = test_input($_POST["village"]);
   }
 
-  if (empty($_POST["organisation"])) {
-    $organisationErr = "";
+  if (empty($_POST["mandal"])) {
+    $mandalErr = "Mandal is required";
   } else {
-    $organisation = test_input($_POST["organisation"]);
+    $mandal = test_input($_POST["mandal"]);
   }
 
+  if (empty($_POST["district"])) {
+    $districtErr = "District is required";
+  } else {
+    $district = test_input($_POST["district"]);
+  }
+
+  
+  if (empty($_POST["state"])) {
+    $stateErr = "State is required";
+  } else {
+    $state = test_input($_POST["state"]);
+  }
 
   if (empty($_POST["newpassword"])) {
     $newpasswordErr = "New Password cannot be Empty";
@@ -240,28 +226,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmpasswordErr = "new Password and confirm password must be same";
   }
 
-  if (empty($_POST["address"])) {
-    $addressErr = "";
-  } else {
-    $address = test_input($_POST["address"]);
-  }
-
-  if (empty($_POST["pincode"])) {
-    $pincodeErr = "";
-  } else {
-    $pincode = test_input($_POST["pincode"]);
-  }
-
-  if (empty($_POST["state"])) {
-    $stateErr = "";
-  } else {
-    $state = test_input($_POST["state"]);
-  }
-  if (empty($_POST["gender"])) {
-    $genderErr = "Gender is required";
-  } else {
-    $gender = test_input($_POST["gender"]);
-  }
+  
+  
 }
 
 function test_input($data) {
@@ -276,28 +242,14 @@ function test_input($data) {
   <p><span class="error">* required field</span></p>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
 <table>
-
-<tr><td>
-  Trader Id:</td><td> <input type="number" name="tid" class="inputs">
-  <span class="error">* <?php echo $tidErr;?></span></td>
-</tr><tr><td><td></td></td></tr>
-
-
   <tr><td>
   Name:</td><td> <input type="text" name="name" class="inputs">
   <span class="error">* <?php echo $nameErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
-
-<tr><td>
-  Username:</td><td>  <input type="text" name="username" class="inputs">
-  <span class="error">* <?php echo $unameErr;?></span></td>
-</tr><tr><td><td></td></td></tr>
-
  <tr><td>
   Age:</td><td>  <input type="text" name="age" class="inputs">
   <span class="error"><?php echo $ageErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
-
   <tr><td>
   Gender:</td><td> 
   <input type="radio" name="gender" value="Female">Female
@@ -309,13 +261,25 @@ function test_input($data) {
   Mobile Number: </td><td> <input type="text" name="mobilenumber" class="inputs">
   <span class="error">*<?php echo $mobilenumberErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
+<tr><td>
+  Pattadhar Passbook Number: </td><td> <input type="text" name="ppbno" class="inputs">
+  <span class="error">*<?php echo $ppbnoErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
  <tr><td>
-  Gmail:</td><td> <input type="text" name="gmail" class="inputs">
-  <span class="error">*<?php echo $gmailErr;?></span></td>
+  Village:</td><td> <input type="text" name="vilage" class="inputs">
+  <span class="error">*<?php echo $villageErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
   <tr><td>
-  Organisation:</td><td> <input type="text" name="organisation" class="inputs">
-  <span class="error">*<?php echo $organisationErr;?></span></td>
+  Mandal:</td><td> <input type="text" name="mandal" class="inputs">
+  <span class="error">*<?php echo $mandalErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+<tr><td>
+  District:</td><td> <input type="text" name="district" class="inputs">
+  <span class="error">*<?php echo $districtErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+<tr><td>
+  State:</td><td> <input type="text" name="state" class="inputs">
+  <span class="error">*<?php echo $stateErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
 <tr><td>
   New Password:</td><td> <input type="password" name="newpassword" class="inputs">
@@ -325,18 +289,6 @@ function test_input($data) {
   Confirm Password:</td><td> <input type="password" name="confirmpassword" class="inputs">
   <span class="error">*<?php echo $confirmpasswordErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
- <tr><td>
-  Address:</td><td>  <input type="text" name="address" class="inputs">
-  <span class="error">*<?php echo $addressErr;?></span></td>
-</tr><tr><td><td></td></td></tr>
-<tr><td>
-  Pincode: </td><td> <input type="text" name="pincode" class="inputs">
-  <span class="error">*<?php echo $pincodeErr;?></span></td>
-</tr><tr><td><td></td></td></tr>
-  <tr><td>
-  State:</td><td>  <input type="text" name="state" class="inputs">
-  <span class="error">*<?php echo $stateErr;?></span></td>
-</tr>
   
 </table>
   <input type="submit" name="submit" value="Submit" class="sub">  
@@ -345,7 +297,7 @@ function test_input($data) {
 <?php include 'connection.php'?>
 <?php
     
-      $query = "INSERT INTO `tradersregister` (`tid`, `name`, `username`, `age`, `gender`, `mobilenumber`, `gmail`, `organisatoin`, `newpassword`, `confirmpassword`, `address`, `pincode`, `state`, `traderregisteredon`) VALUES ('$tid', '$name', '$uname', '$age', '$gender', '$mobilenumber', '$gmail', '$organisation', '$newpassword', '$confirmpassword', '$address', '$pincode', '$state', current_timestamp())";
+      $query = "INSERT INTO `farmersregister` (`ppbno`, `name`, `age`, `gender`, `mobilenumber`, `village`, `mandal`, `district`, `state`, `createpassword`, `confirmpassword`, `farmer_registered_on`) VALUES ('$ppbno', '$name', '$age', '$gender', '$mobilenumber', '$village', '$mandal', '$district', '$state', '$newpassword', '$confirmpassword', current_timestamp())";
       $res = mysqli_query($conn,$query);
 ?>
 </body>

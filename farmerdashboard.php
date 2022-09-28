@@ -1,9 +1,16 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['farmerusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agriculture Market | Conatctus</title>
+    <title>Agriculture Market | Farmers</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -25,6 +32,28 @@
  background-size: cover;
            
        }
+       button{
+            width: 200px;
+        }
+.input{
+  text-align: center;
+  margin: 100px auto;
+}
+
+
+
+
+input{
+  width: 600px;
+  height: 55px;
+  padding: 5px 10px;
+  background: #e7e7e7;
+  border: none;
+  border-radius: 1px;
+  font-family: "Nunito",sans-serif;
+  font-weight:bold;
+  font-size: 20px;
+}
        .zoom:hover{
           transform:scale(1.1);
       }
@@ -49,8 +78,18 @@
             padding: 20px;
             box-shadow: 0px 0px 10px 3px black;
         }
-       
+        table,th,td{
+            border:2px solid black;
+            margin:20px 410px;
+        }
+        th,td 
+        {
+            padding:20px;
 
+         }
+        .navbar-nav {
+            margin-left: auto;
+        } */
 
 
 
@@ -107,6 +146,13 @@
                             </div>
                         </li>
                     </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['farmerusername']?> 
+                            </a></b>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -116,8 +162,35 @@
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
         font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
-
-        <h1>welcome to farmershome page</h1>
+        <?php include 'connection.php';?>
+    <table>
+        <thead>
+            <tr>
+                <th>Pattadhar Passbook Number  </th>
+                <th>Product Id  </th>
+                <th>Product name  </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+                $query = "select farmersregister.ppbno, productdetails.pid, productdetails.productname from farmersregister,productdetails where farmersregister.ppbno=productdetails.ppbno";
+                $result=mysqli_query($conn,$query);
+                if ($result->num_rows > 0):
+                while($array=mysqli_fetch_row($result)):?>
+                <tr>
+                    <td><?php echo $array[0];?></td>
+                    <td><?php echo $array[1];?></td>
+                    <td><?php echo $array[2];?></td>
+                </tr>
+                <?php endwhile; ?>
+                <?php endif; ?>
+        </tbody>
+    </table>   
+    <form action="farmerdashboard2.php" method="post">
+        <center><input type="number" name="pid" placeholder="Enter product id you want to view" id="city-input">
+        <button class="btn btn-info ml-4" type="submit">Search</button></center>
+    </form>
+        <!-- <h1>welcome to farmershome page</h1> -->
 <footer>
     <div class="container">
         <p style="color: black;">@copyrights 2021 AMS.All Rights Reserved.</p>

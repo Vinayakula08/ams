@@ -1,3 +1,5 @@
+<?php include 'connection.php';?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,8 +52,9 @@
             box-shadow: 0px 0px 10px 3px black;
         }
        
-
-
+        button{
+            width: 200px;
+        }
 
 
 
@@ -110,22 +113,65 @@
                 </div>
             </div>
         </nav>
+        <?php 
+    $month = date('m');
+    $day = date('d');
+    $year = date('Y');
+
+    $today = $day . '-' . $month . '-' . $year;
+    ?>
         <marquee behavior="scroll" direction="left" style="
         color: rgb(32, 70, 28);
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
-        <a href="farmerregister.php" >
-             <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-               <b>Register Farmer</b></button> </a>
-        <a href="traderregister.php" >
-            <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        <b>Register Trader</b></button> </a>
-        <a href="check.php" >
-            <button class="btn btn-success bg-green text-center border px-3 shadow text-white mr-sm-2 font22 btnBig" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        <b>Check Product</b></button> </a>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        <br>
+        <br>
+       <center><div>
+<?php
+        echo "<button><a href='destroysessions.php'>Click here to revisit to farmer login</a></buttton>";
+        $pid = $_SESSION['pid'];
+        $ppbno = $_SESSION['ppbno'];
+        $price = $_SESSION['price'];    
+        $query1 = "select tid from pricedetails where pid=$pid";
+        $result1 = mysqli_query($conn,$query1);
+        $array1 = mysqli_fetch_array($result1);
+        $tid = $array1['tid'];
+        
+        $query2 = "select name from tradersregister where tid = $tid";
+        $result2 = mysqli_query($conn,$query2);
+        $array2 = mysqli_fetch_array($result2);
+        $tname = $array2['name'];
 
+        $query5 = "select organisation from tradersregister where tid = $tid";
+        $result5 = mysqli_query($conn,$query5);
+        $array5 = mysqli_fetch_array($result5);
+        $organisation = $array5['organisation'];
+
+        $query3 = "select name from farmersregister where ppbno = '$ppbno'";
+        $result3 = mysqli_query($conn,$query3);
+        $array3 = mysqli_fetch_array($result3);
+        $fname = $array3['name'];
+
+        $query4 = "select productname from productdetails where pid = $pid";
+        $result4 = mysqli_query($conn,$query4);
+        $array4 = mysqli_fetch_array($result4);
+        $productname = $array4['productname'];
+
+        $query6 = "insert into allproducts values($pid,'$productname', '$fname', '$ppbno', $tid, '$tname', '$organisation', $price, current_timestamp());";
+        $result6 = mysqli_query($conn,$query6);
+
+        $query7 = "delete from pricedetails where pid=$pid";
+        $query8 = "delete from productdetails where pid=$pid";
+        $result7 = mysqli_query($conn,$query7);
+        $result8 = mysqli_query($conn,$query8);
+        echo '<script>alert("Successfully sold")</script>';
+        
+        
+
+?>
+</div></center>
 <footer>
     <div class="container">
         <p style="color: black;">@copyrights 2021 AMS.All Rights Reserved.</p>

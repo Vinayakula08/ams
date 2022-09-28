@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+
+<?php 
+    session_start();
+    if(!isset($_SESSION['adminusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -98,12 +105,12 @@
                         <li class="nav-item active">
                             <div class="zoom">
                             
-                            <a class="nav-link" href="home.html"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+                            <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="farmers.html"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
+                            <a class="nav-link" href="farmers.php"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
                         </div>
                         </li>
                         <li class="nav-item">
@@ -121,6 +128,13 @@
                             <div class="zoom">
                             <a class="nav-link" href="#">About us</a>
                             </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['adminusername']?> 
+                            </a></b>
                         </li>
                     </ul>
                 </div>

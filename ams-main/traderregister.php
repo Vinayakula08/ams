@@ -1,10 +1,7 @@
-<?php 
-    session_start();
-    if(!isset($_SESSION['adminusername'])){
-        header("location:home.php");
-        exit();
-    }
-?> 
+<?php
+// Start the session
+session_start();
+?>
 <?php include 'connection.php';?>
 <!DOCTYPE html>
 <html lang="en">
@@ -129,13 +126,6 @@
                             <div class="zoom">
                             <a class="nav-link" href="#">About us</a>
                             </div>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                           <b> <a class="nav-link" href="destroysessions.php">
-                               Logout <?php echo $_SESSION['adminusername']?> 
-                            </a></b>
                         </li>
                     </ul>
                 </div>
