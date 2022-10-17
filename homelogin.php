@@ -16,10 +16,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             $_SESSION['adminusername'] = $username;
 
 
-            $query2 = "select tid from tradersregister where username = '$username' and confirmpassword = '$password'";
-            $res2 = mysqli_query($conn,$query2);
-            $row2 = mysqli_fetch_array($res2);
-            $_SESSION['tid'] = $row2[0];
+           
             header('location:admindashboard.php');
         }
         else{
@@ -50,6 +47,14 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             session_start();
             $_SESSION['auth']='true';
             $_SESSION['traderusername'] = $username;
+
+
+            $query2 = "select tid from tradersregister where username = '$username' and confirmpassword = '$password'";
+            $res2 = mysqli_query($conn,$query2);
+            $row2 = mysqli_fetch_array($res2);
+            $_SESSION['tid'] = $row2[0];
+
+            
             header('location:traderdashboard.php');
         }
         else{

@@ -1,3 +1,5 @@
+<?php include 'connection.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,7 +118,17 @@ body{
     font-weight: bold;
     background: #49c3d6;margin-bottom: 0;
     padding: 10px 0 10px;
-    font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton MSP:Rs.6155  || Paddy MSP:1300 || Maize MSP:Rs.1621 </marquee>
+    font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?></marquee>
     <form action = "traderlogin.php" method = "post">    
     <br>
     <div class="row mx-0 my-4 ">

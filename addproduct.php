@@ -154,7 +154,17 @@
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?></marquee>
         <?php
 // define variables and set to empty values
 $pidErr = $pnameErr =  $qualityErr = $quantityErr = $moistureErr = $mspErr = $ppbnoErr =  "";
@@ -165,6 +175,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pidErr = "pid is required";
   } else {
     $pid = test_input($_POST["pid"]);
+    // session_start();
+    // $_SESSION['abc'] = $pid;
   }
   
   if (empty($_POST["pname"])) {
@@ -270,13 +282,17 @@ function test_input($data) {
 </div>
 <?php include 'connection.php'?>
 <?php
-    
-      $query = "INSERT INTO `productdetails` (`pid`, `productname`, `quantity`, `quality`, `moisture`, `msp`, `ppbno` ) VALUES ('$pid', '$pname', '$quality', '$quantity', '$moisture', '$msp', '$ppbno')";
-      $res = mysqli_query($conn,$query);
-      if($res)
-      {
-        echo '<script>alert("Successfully inserted")</script>';
-      }
+      if($pname!=null){
+        //echo "hello";
+        $query = "INSERT INTO `productdetails` (`pid`, `productname`, `quantity`, `quality`, `moisture`, `msp`, `ppbno` ) VALUES ('$pid', '$pname', '$quality', '$quantity', '$moisture', '$msp', '$ppbno')";
+        $res = mysqli_query($conn,$query);
+        if($res)
+        {
+          echo '<script>alert("Successfully inserted")</script>';
+        }
+     }
+    // unset($_SESSION['abc']);
+    // session_destroy();
 ?>
 </body>
 </html>
