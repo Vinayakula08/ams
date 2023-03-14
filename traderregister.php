@@ -1,7 +1,15 @@
-<?php
-// Start the session
-session_start();
+<?php include 'connection.php';
 ?>
+<?php
+error_reporting(E_ERROR & E_WARNING & ~E_PARSE);
+?>
+<?php 
+    session_start();
+    if(!isset($_SESSION['adminusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> 
 <?php include 'connection.php';?>
 <!DOCTYPE html>
 <html lang="en">
@@ -100,7 +108,7 @@ session_start();
                 <div class="navbar-collapse collapse navbar" id="collapsibleNavbar">
                     <ul class="nav navbar-nav mr-auto">
 
-                        <li class="nav-item active">
+                    <li class="nav-item active">
                             <div class="zoom">
                             
                             <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
@@ -113,19 +121,32 @@ session_start();
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">Traders</a>
+                            <a class="nav-link" href="trader.php">Buyers</a>
                         </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
 
-                            <a class="nav-link" href="#">Admin</a>
+                            <a class="nav-link" href="admin.php">Admin</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">About us</a>
+                            
+                            <a class="nav-link" href="pricing.php">Pricing</a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="aboutus.php">About us</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['adminusername']?> 
+                            </a></b>
                         </li>
                     </ul>
                 </div>
@@ -143,7 +164,17 @@ session_start();
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?> </marquee>
         <?php
 // define variables and set to empty values
 $nameErr = $tidErr = $unameErr = $ageErr =  $genderErr = $mobilenumberErr = $gmailErr = $organisationErr = $newpasswordErr = $confirmpasswordErr = $addressErr = $pincodeErr = $stateErr = "";
@@ -203,7 +234,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $gmail = test_input($_POST["gmail"]);
     if (!filter_var($gmail, FILTER_VALIDATE_EMAIL)) {
-      $emailErr = "Invalid email format";
+      $gmailErr = "Invalid email format";
     }
   }
 
@@ -334,9 +365,51 @@ function test_input($data) {
 </div>
 <?php include 'connection.php'?>
 <?php
-    
-      $query = "INSERT INTO `tradersregister` (`tid`, `name`, `username`, `age`, `gender`, `mobilenumber`, `gmail`, `organisatoin`, `newpassword`, `confirmpassword`, `address`, `pincode`, `state`, `traderregisteredon`) VALUES ('$tid', '$name', '$uname', '$age', '$gender', '$mobilenumber', '$gmail', '$organisation', '$newpassword', '$confirmpassword', '$address', '$pincode', '$state', current_timestamp())";
-      $res = mysqli_query($conn,$query);
+     $query = "INSERT INTO `tradersregister`(`tid`, `name`, `username`, `age`, `gender`, `mobilenumber`, `gmail`, `organisation`, `newpassword`, `confirmpassword`, `address`, `pincode`, `state`, `traderregisteredon`) VALUES ('$tid','$name','$uname','$age','$gender','$mobilenumber','$gmail','$organisation','$newpassword','$confirmpassword','$address','$pincode','$state','current_timestamp()')";
+     $res = mysqli_query($conn,$query);
+     if($res)
+        {
+          echo '<script>alert("Successfully inserted")</script>';
+        }
+     
+?>
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+$mail = new PHPMailer(true);
+
+$mail->isSMTP();
+$mail->Host = 'smtp.gmail.com';
+$mail->SMTPAuth = true;
+
+$mail->Username = '19bd1a0541@gmail.com';
+$mail->Password = 'geiakncbqmsaqmsi';
+
+$mail->SMTPSecure = 'ssl';
+$mail->Port = 465;
+$mail->setFrom('19bd1a0541@gmail.com');
+
+
+$mail->addAddress($gmail);
+
+$mail->isHTML(true);
+
+$subject = "New registration.";
+$mail->Subject = $subject;
+
+
+$message = "Dear ". $name  . " <br>Welcome to E-AGRI COMMODITY MARKETING..<br>Username: " . $uname . " <br>Passsword: " . $newpassword . " <br> Kindly login through <a href='loclahost/ams'>click here to login</a>";
+$mail->Body = $message;
+
+$mail->send();
+
+echo "<script>alert('Sent Successfully');
+document.location.href = 'admindashboard.php';
+</script>"
 ?>
 </body>
 </html>

@@ -1,7 +1,5 @@
 <?php include 'connection.php';?>
-<?php
-    session_start();
-    ?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +58,6 @@
 
 
 
-
     </style>
 </head>
 <body>
@@ -84,8 +81,7 @@
              
                 <div class="navbar-collapse collapse navbar" id="collapsibleNavbar">
                     <ul class="nav navbar-nav mr-auto">
-
-                        <li class="nav-item active">
+                    <li class="nav-item active">
                             <div class="zoom">
                             
                             <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
@@ -98,18 +94,24 @@
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">Buyers</a>
+                            <a class="nav-link" href="trader.php">Buyers</a>
                         </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
 
-                            <a class="nav-link" href="#">Admin</a>
+                            <a class="nav-link" href="admin.php">Admin</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">About us</a>
+                            
+                            <a class="nav-link" href="pricing.php">Pricing</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="aboutus.php">About us</a>
                             </div>
                         </li>
                     </ul>
@@ -128,12 +130,22 @@
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?> </marquee>
         <br>
         <br>
        <center><div>
 <?php
-        echo "<button><a href='farmers.php'>Click here to revisit to farmer login</a></buttton>";
+        echo "<button><a href='destroysessions.php'>Click here to revisit to farmer login</a></buttton>";
         $pid = $_SESSION['pid'];
         $ppbno = $_SESSION['ppbno'];
         $price = $_SESSION['price'];    
@@ -152,17 +164,34 @@
         $array5 = mysqli_fetch_array($result5);
         $organisation = $array5['organisation'];
 
+        $query11 = "select gmail from tradersregister where tid = $tid";
+        $result11 = mysqli_query($conn,$query11);
+        $array11 = mysqli_fetch_array($result11);
+        $tgmail = $array11['gmail'];
+
         $query3 = "select name from farmersregister where ppbno = '$ppbno'";
         $result3 = mysqli_query($conn,$query3);
         $array3 = mysqli_fetch_array($result3);
         $fname = $array3['name'];
+
+        $query12 = "select email from farmersregister where ppbno = '$ppbno'";
+        $result12 = mysqli_query($conn,$query12);
+        $array12 = mysqli_fetch_array($result12);
+        $fgmail = $array12['email'];
 
         $query4 = "select productname from productdetails where pid = $pid";
         $result4 = mysqli_query($conn,$query4);
         $array4 = mysqli_fetch_array($result4);
         $productname = $array4['productname'];
 
-        $query6 = "insert into allproducts values($pid,'$productname', '$fname', '$ppbno', $tid, '$tname', '$organisation', $price, current_timestamp());";
+        $query9 = "select quantity from productdetails where pid = $pid";
+        $result9 = mysqli_query($conn,$query9);
+        $array9 = mysqli_fetch_array($result9);
+        $quantity = $array9['quantity'];
+
+
+
+        $query6 = "insert into allproducts values($pid,'$productname', '$fname', '$ppbno', $tid, '$tname', '$organisation', '$quantity', $price, current_timestamp());";
         $result6 = mysqli_query($conn,$query6);
 
         $query7 = "delete from pricedetails where pid=$pid";
@@ -174,6 +203,81 @@
         
 
 ?>
+
+
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+$mail = new PHPMailer(true);
+
+$mail->isSMTP();
+$mail->Host = 'smtp.gmail.com';
+$mail->SMTPAuth = true;
+
+$mail->Username = '19bd1a0541@gmail.com';
+$mail->Password = 'geiakncbqmsaqmsi';
+
+$mail->SMTPSecure = 'ssl';
+$mail->Port = 465;
+$mail->setFrom('19bd1a0541@gmail.com');
+
+
+$mail->addAddress($tgmail);
+
+$mail->isHTML(true);
+
+$subject = "Product Information.";
+$mail->Subject = $subject;
+
+
+$message = "Dear ". $tname  . " <br>you are the bid winner. Thanks for using e-agri commodity marketing.<br>Commodity Id: " . $pid . " <br>Commodity type: " . $productname . " <br>Commodity Quantity:" . $quantity . " <br>Commodity price: " . $price . " <br>Kindly use our platform through <a href='loclahost/ams'>click here to login</a>";
+$mail->Body = $message;
+
+$mail->send();
+
+
+?>
+
+
+<?php
+
+$fmail = new PHPMailer(true);
+
+$fmail->isSMTP();
+$fmail->Host = 'smtp.gmail.com';
+$fmail->SMTPAuth = true;
+
+$fmail->Username = '19bd1a0541@gmail.com';
+$fmail->Password = 'geiakncbqmsaqmsi';
+
+$fmail->SMTPSecure = 'ssl';
+$fmail->Port = 465;
+$fmail->setFrom('19bd1a0541@gmail.com');
+
+
+$fmail->addAddress($fgmail);
+
+$fmail->isHTML(true);
+
+$subject = "Product sold.";
+$fmail->Subject = $subject;
+
+
+$message = "Dear ". $fname  . " <br>Your commodity got sold for " . $organisation . " traded by  " . $tname . " <br>Thanks for using E-AGRI COMMODITY MARKETING.<br>Commidty type" . $productname . " <br>Commodity quantity: " . $quantity . " <br>COmmodity price: " . $price . " <br> Kindly login through <a href='loclahost/ams'>click here to login</a>";
+$fmail->Body = $message;
+
+$fmail->send();
+
+echo "<script>alert('Sent Successfully');
+document.location.href = 'admindashboard.php';
+</script>"
+?>
+
+
 </div></center>
 <footer>
     <div class="container">

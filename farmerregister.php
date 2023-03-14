@@ -1,4 +1,16 @@
-<!DOCTYPE html>
+<?php include 'connection.php';
+
+?>
+<?php
+error_reporting(E_ERROR & E_WARNING & ~E_PARSE);
+?>
+<?php 
+    session_start();
+    if(!isset($_SESSION['adminusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -95,7 +107,7 @@
                 <div class="navbar-collapse collapse navbar" id="collapsibleNavbar">
                     <ul class="nav navbar-nav mr-auto">
 
-                        <li class="nav-item active">
+                    <li class="nav-item active">
                             <div class="zoom">
                             
                             <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
@@ -108,19 +120,32 @@
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">Traders</a>
+                            <a class="nav-link" href="trader.php">Buyers</a>
                         </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
 
-                            <a class="nav-link" href="#">Admin</a>
+                            <a class="nav-link" href="admin.php">Admin</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">About us</a>
+                            
+                            <a class="nav-link" href="pricing.php">Pricing</a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="aboutus.php">About us</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['adminusername']?> 
+                            </a></b>
                         </li>
                     </ul>
                 </div>
@@ -138,11 +163,21 @@
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?> </marquee>
         <?php
 // define variables and set to empty values
-$nameErr = $ageErr =  $genderErr = $mobilenumberErr= $ppbnoErr = $villageErr = $mandalErr= $districtErr = $stateErr = $newpasswordErr = $confirmpasswordErr = "";
-$name = $age =  $gender = $mobilenumber = $ppbno = $village = $mandal = $district = $state = $newpassword = $confirmpassword = "";
+$nameErr = $ageErr =  $genderErr = $gmailErr = $mobilenumberErr= $ppbnoErr = $villageErr = $mandalErr= $districtErr = $stateErr = $newpasswordErr = $confirmpasswordErr = "";
+$name = $age =  $gender = $mobilenumber = $gmail = $ppbno = $village = $mandal = $district = $state = $newpassword = $confirmpassword = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["name"])) {
@@ -174,6 +209,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ppbnoErr = "Pattadhar PassBook Number is Required.";
   } else {
     $ppbno = test_input($_POST["ppbno"]);
+  }
+
+  if (empty($_POST["email"])) {
+    $gmailErr = "Email is required";
+  } else {
+    $gmail = test_input($_POST["email"]);
+    if (!filter_var($gmail, FILTER_VALIDATE_EMAIL)) {
+      $gmailErr = "Invalid email format";
+    }
   }
 
   if (empty($_POST["mobilenumber"])) {
@@ -258,6 +302,10 @@ function test_input($data) {
   <span class="error">* <?php echo $genderErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
 <tr><td>
+  Email Id: </td><td> <input type="text" name="email" class="inputs" autocomplete="off">
+  <span class="error">*<?php echo $gmailErr;?></span></td>
+</tr><tr><td><td></td></td></tr>
+<tr><td>
   Mobile Number: </td><td> <input type="text" name="mobilenumber" class="inputs">
   <span class="error">*<?php echo $mobilenumberErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
@@ -266,7 +314,7 @@ function test_input($data) {
   <span class="error">*<?php echo $ppbnoErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
  <tr><td>
-  Village:</td><td> <input type="text" name="vilage" class="inputs">
+  Village:</td><td> <input type="text" name="village" class="inputs">
   <span class="error">*<?php echo $villageErr;?></span></td>
 </tr><tr><td><td></td></td></tr>
   <tr><td>
@@ -297,8 +345,51 @@ function test_input($data) {
 <?php include 'connection.php'?>
 <?php
     
-      $query = "INSERT INTO `farmersregister` (`ppbno`, `name`, `age`, `gender`, `mobilenumber`, `village`, `mandal`, `district`, `state`, `createpassword`, `confirmpassword`, `farmer_registered_on`) VALUES ('$ppbno', '$name', '$age', '$gender', '$mobilenumber', '$village', '$mandal', '$district', '$state', '$newpassword', '$confirmpassword', current_timestamp())";
+      $query = "INSERT INTO `farmersregister` (`ppbno`, `name`, `age`, `gender`,  `email`,  `mobilenumber`, `village`, `mandal`, `district`, `state`, `createpassword`, `confirmpassword`, `farmer_registered_on`) VALUES ('$ppbno', '$name', '$age', '$gender', '$gmail', '$mobilenumber', '$village', '$mandal', '$district', '$state', '$newpassword', '$confirmpassword', current_timestamp())";
       $res = mysqli_query($conn,$query);
+      if($res)
+        {
+          echo '<script>alert("Successfully inserted")</script>';
+        }
+      
+?>
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+$mail = new PHPMailer(true);
+
+$mail->isSMTP();
+$mail->Host = 'smtp.gmail.com';
+$mail->SMTPAuth = true;
+
+$mail->Username = '19bd1a0541@gmail.com';
+$mail->Password = 'geiakncbqmsaqmsi';
+
+$mail->SMTPSecure = 'ssl';
+$mail->Port = 465;
+$mail->setFrom('19bd1a0541@gmail.com');
+
+
+$mail->addAddress($gmail);
+
+$mail->isHTML(true);
+
+$subject = "New registration.";
+$mail->Subject = $subject;
+
+
+$message = "Dear ". $name  . " <br>Welcome to E-AGRI COMMODITY MARKETING..<br>Username: " . $ppbno . " <br>Passsword: " . $newpassword . " <br> Kindly login through <a href='loclahost/ams'>click here to login</a>";
+$mail->Body = $message;
+
+$mail->send();
+
+echo "<script>alert('Sent Successfully');
+document.location.href = 'admindashboard.php';
+</script>"
 ?>
 </body>
 </html>

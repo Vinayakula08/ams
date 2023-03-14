@@ -1,3 +1,11 @@
+<?php 
+    include "connection.php";
+    session_start();
+    if(!isset($_SESSION['adminusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +57,9 @@
             padding: 20px;
             box-shadow: 0px 0px 10px 3px black;
         }
-       
+        .navbar-nav {
+            margin-left: auto;
+        }
 
 
 
@@ -79,7 +89,7 @@
                 <div class="navbar-collapse collapse navbar" id="collapsibleNavbar">
                     <ul class="nav navbar-nav mr-auto">
 
-                        <li class="nav-item active">
+                    <li class="nav-item active">
                             <div class="zoom">
                             
                             <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
@@ -92,30 +102,38 @@
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">Buyers</a>
+                            <a class="nav-link" href="trader.php">Buyers</a>
                         </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
 
-                            <a class="nav-link" href="#">Admin</a>
+                            <a class="nav-link" href="admin.php">Admin</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">About us</a>
+                            
+                            <a class="nav-link" href="pricing.php">Pricing</a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="aboutus.php">About us</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['adminusername']?> 
+                            </a></b>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <?php
-        if(isset($_SESSION["username"]==FALSE))
-        {
-            header("refresh:0;url=home.php")
-        }
-        ?>
+        
         <?php 
     $month = date('m');
     $day = date('d');
@@ -128,7 +146,17 @@
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?> </marquee>
         <br>
         <br>
 

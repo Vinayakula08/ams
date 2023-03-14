@@ -1,4 +1,12 @@
-<?php include 'connection.php';?>
+<?php include 'connection.php';
+?>
+<?php 
+    session_start();
+    if(!isset($_SESSION['adminusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,15 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agriculture Market | Conatctus</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <style>
        body{
            
@@ -96,7 +95,7 @@
                 <div class="navbar-collapse collapse navbar" id="collapsibleNavbar">
                     <ul class="nav navbar-nav mr-auto">
 
-                        <li class="nav-item active">
+                    <li class="nav-item active">
                             <div class="zoom">
                             
                             <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
@@ -109,7 +108,7 @@
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="trader.php">Traders</a>
+                            <a class="nav-link" href="trader.php">Buyers</a>
                         </div>
                         </li>
                         <li class="nav-item">
@@ -120,8 +119,21 @@
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">About us</a>
+                            
+                            <a class="nav-link" href="pricing.php">Pricing</a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="aboutus.php">About us</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['adminusername']?> 
+                            </a></b>
                         </li>
                     </ul>
                 </div>
@@ -139,7 +151,17 @@
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?></marquee>
         <?php
 // define variables and set to empty values
 $pidErr = $pnameErr =  $qualityErr = $quantityErr = $moistureErr = $mspErr = $ppbnoErr =  "";
@@ -150,6 +172,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pidErr = "pid is required";
   } else {
     $pid = test_input($_POST["pid"]);
+    // session_start();
+    // $_SESSION['abc'] = $pid;
   }
   
   if (empty($_POST["pname"])) {
@@ -255,13 +279,17 @@ function test_input($data) {
 </div>
 <?php include 'connection.php'?>
 <?php
-    
-      $query = "INSERT INTO `productdetails` (`pid`, `productname`, `quantity`, `quality`, `moisture`, `msp`, `ppbno` ) VALUES ('$pid', '$pname', '$quality', '$quantity', '$moisture', '$msp', '$ppbno')";
-      $res = mysqli_query($conn,$query);
-      if($res)
-      {
-        echo '<script>alert("Successfully inserted")</script>';
-      }
+      if($pname!=null){
+        //echo "hello";
+        $query = "INSERT INTO `productdetails` (`pid`, `productname`, `quantity`, `quality`, `moisture`, `msp`, `ppbno` ) VALUES ('$pid', '$pname', '$quantity', '$quality', '$moisture', '$msp', '$ppbno')";
+        $res = mysqli_query($conn,$query);
+        if($res)
+        {
+          echo '<script>alert("Successfully inserted")</script>';
+        }
+     }
+    // unset($_SESSION['abc']);
+    // session_destroy();
 ?>
 </body>
 </html>

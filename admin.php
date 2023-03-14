@@ -1,3 +1,4 @@
+<?php include "connection.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,39 +56,39 @@ body{
             
             <div class="navbar-collapse collapse navbar" id="collapsibleNavbar">
                 <ul class="nav navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <div class="zoom">
-                        
-                        <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+                <li class="nav-item active">
+                            <div class="zoom">
+                            
+                            <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="farmers.php"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="zoom">
-                        <a class="nav-link" href="farmers.php"><i class="fa 92577344-2b1d7600-f2a8-11ea-9ddc-f03f280bda78" aria-hidden="true">Farmers</i></a>
-                    </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="zoom">
-                        <a class="nav-link" href="trader.php">Buyers</a>
-                    </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="zoom">
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="trader.php">Buyers</a>
+                        </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
 
-                        <a class="nav-link" href="admin.php">Admin</a>
-                        </div>
-                    </li>
-                    <li class="nav-item active">
-                        <div class="zoom">
-                        
-                        <a class="nav-link" href="#"><i class="fa " aria-hidden="true"></i>Pricing</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="zoom">
-                        <a class="nav-link" href="#">About us</a>
-                        </div>
-                    </li>
+                            <a class="nav-link" href="admin.php">Admin</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            
+                            <a class="nav-link" href="pricing.php">Pricing</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="aboutus.php">About us</a>
+                            </div>
+                        </li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item">
@@ -116,7 +117,17 @@ body{
     font-weight: bold;
     background: #49c3d6;margin-bottom: 0;
     padding: 10px 0 10px;
-    font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton MSP:Rs.6155  || Paddy MSP:1300 || Maize MSP:Rs.1621 </marquee>
+    font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?></marquee>
     <form action = "adminlogin.php" method = "post">    
     <br>
     <div class="row mx-0 my-4 ">

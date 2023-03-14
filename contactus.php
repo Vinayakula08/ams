@@ -1,8 +1,10 @@
+<?php include 'connection.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agriculture Market | Conatctus</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -79,7 +81,7 @@
                 <div class="navbar-collapse collapse navbar" id="collapsibleNavbar">
                     <ul class="nav navbar-nav mr-auto">
 
-                        <li class="nav-item active">
+                    <li class="nav-item active">
                             <div class="zoom">
                             
                             <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
@@ -103,7 +105,13 @@
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">About us</a>
+                            
+                            <a class="nav-link" href="pricing.php">Pricing</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="aboutus.php">About us</a>
                             </div>
                         </li>
                     </ul>
@@ -122,21 +130,34 @@
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?>
+             </marquee>
+    <form action="contactinsert.php" method="post">
+        
     <div class="container">
         <h2 strond style="font-size: medium; color:black;">Feel free to contact us through this.</h2>
         <hr>
         Email<input type="email" name="Email" id="email" placeholder="12345@gmail.com">
-        Mobile Number<input type="text" name="Mobile number" id="number" placeholder="+91 0123456789">
+        Mobile Number<input type="text" name="Mobilenumber" id="number" placeholder="+91 0123456789">
         <br>
         
         
       <center> <label strong style="font-size:medium;color:black;">Provide us description about your problem</label></center> 
-                    <textarea class="form-control" id="message" rows="10"></textarea>
+                    <textarea class="form-control" id="message" rows="10" name="textarea"></textarea>
                     <br>
 
                     <div class="form-group">
-                      <center>  <button class="btn btn-primary" onclick="showDetails();">Submit</button></center>
+                      <center>  <input type="submit" class="btn btn-primary" onclick="showDetails();"></center>
                     </div>
 
      <div style="color: black;">
@@ -146,6 +167,7 @@
      </div>
 
      </div>
+     </form>
      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

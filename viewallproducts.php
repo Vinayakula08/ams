@@ -1,7 +1,12 @@
-<?php
-// Start the session
-session_start();
+<?php include 'connection.php';
 ?>
+<?php 
+    session_start();
+    if(!isset($_SESSION['adminusername'])){
+        header("location:home.php");
+        exit();
+    }
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,7 +95,6 @@ input{
         }
 
 
-
     </style>
 </head>
 <body>
@@ -115,7 +119,7 @@ input{
                 <div class="navbar-collapse collapse navbar" id="collapsibleNavbar">
                     <ul class="nav navbar-nav mr-auto">
 
-                        <li class="nav-item active">
+                    <li class="nav-item active">
                             <div class="zoom">
                             
                             <a class="nav-link" href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
@@ -128,30 +132,61 @@ input{
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">Buyers</a>
+                            <a class="nav-link" href="trader.php">Buyers</a>
                         </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
 
-                            <a class="nav-link" href="#">Admin</a>
+                            <a class="nav-link" href="admin.php">Admin</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <div class="zoom">
-                            <a class="nav-link" href="#">About us</a>
+                            
+                            <a class="nav-link" href="pricing.php">Pricing</a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="zoom">
+                            <a class="nav-link" href="aboutus.php">About us</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                           <b> <a class="nav-link" href="destroysessions.php">
+                               Logout <?php echo $_SESSION['adminusername']?> 
+                            </a></b>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        <?php 
+    $month = date('m');
+    $day = date('d');
+    $year = date('Y');
+
+    $today = $day . '-' . $month . '-' . $year;
+
+    ?>
         <marquee behavior="scroll" direction="left" style="
         color: rgb(32, 70, 28);
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrolldelay="100">16/09/2021 : Cotton Max Price:Rs.6155   Min Price:Rs.5855 || Paddy Max Price:Rs.1600   Min Price:1300 || Maize Max Price:Rs.1631   Min Price:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrolldelay="100"><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?></marquee>
         <?php include 'connection.php';?>
     <table class="table1">
         <thead>
@@ -164,6 +199,7 @@ input{
                 <th>Trader id  </th>
                 <th>Trader name  </th>
                 <th>Organisation  </th>
+                <th>Quantity  </th>
                 <th>Price  </th>
                 <th>Product sold on  </th>
             </tr>
@@ -184,6 +220,7 @@ input{
                     <td><?php echo $array[6];?></td>
                     <td><?php echo $array[7];?></td>
                     <td><?php echo $array[8];?></td>
+                    <td><?php echo $array[9];?></td>
                 </tr>
                 <?php endwhile; ?>
                 <?php endif; ?>

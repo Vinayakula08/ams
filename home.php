@@ -1,3 +1,4 @@
+<?php include "connection.php" ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,7 +118,7 @@ img{
     <center>
         <div style="text-decoration-style: wavy;color: rgb(165, 15, 15);display: inline;">
         <h1 style="color: rgb(5, 119, 5);">Agriculture Marketing System</h1>
-        <h3 style="color: rgb(13, 95, 37);">Warangal,Telangana</h3>
+       <!-- <h3 style="color: rgb(13, 95, 37);">Warangal,Telangana</h3> -->
        </div></center>
     </div>
     </div>
@@ -150,10 +151,10 @@ img{
                             <a class="nav-link" href="admin.php">Admin</a>
                             </div>
                         </li>
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <div class="zoom">
                             
-                            <a class="nav-link" href="#"><i class="fa " aria-hidden="true"></i>Pricing</a>
+                            <a class="nav-link" href="pricing.php">Pricing</a>
                             </div>
                         </li>
                         <li class="nav-item">
@@ -188,41 +189,26 @@ img{
     $year = date('Y');
 
     $today = $day . '-' . $month . '-' . $year;
+
     ?>
         <marquee behavior="scroll" direction="left" style="
         color: rgb(32, 70, 28);
         font-weight: bold;
         background: #49c3d6;margin-bottom: 0;
         padding: 10px 0 10px;
-        font-size: 14px;display:block" scrollamount="5" ><span><?php echo $today; ?></span>: Cotton MSP:Rs.6155  || Paddy MSP:1300 || Maize MSP:Rs.1621 </marquee>
+        font-size: 14px;display:block" scrollamount="5" ><span><?php echo $today; ?></span>: <?php $query = "select *from mspdetails";
+            $result = mysqli_query($conn,$query);
+            if($result->num_rows>0):
+                while($array=mysqli_fetch_row($result)):
+                    echo $array[0];
+                    echo " MSP: ";
+                    echo $array[1];
+                    echo " || ";
+                endwhile;
+            endif;
+            ?></marquee>
         <br>	<div class="container"><div class="quick-links-btn-sec pull-left"> 
-                <div class="quick-link-list " style="border-radius: 10%;">
-                    <ul>
-                         
-                                <li>
-                                    <p style="text-color: black;"><a href="#"><img alt="" src="https://enam.gov.in/web/assest/images/new-theme/icon/img2.png">Commodity</a></p>				</li>			
-                         
-                               <hr>
-                                <li>
-                                    <p><a href="#"><img alt="" src="https://enam.gov.in/web/assest/images/new-theme/icon/img11.png" xss="removed">Price Details</a></p>				</li>			
-                         
-                                		<hr>
-                            </ul>
-                </div></div>
-                <div class="container"><div class="quick-links-btn-sec pull-right"> 
-                    <div class="quick-link-list" style="border-radius: 10%;">
-                        <ul>
-                             
-                                    		
-                             
-                                    <li>
-                                        <p><a href="#"><img alt="" src="https://enam.gov.in/web/assest/images/new-theme/icon/img12.png" xss="removed">Incentives</a></p>				</li>			
-                             <hr>
-                                    <li>
-                                        <p><a href="#"><img alt="" src="https://enam.gov.in/web/assest/images/new-theme/icon/img25.png" xss="removed">Success Stories</a></p>				</li>	
-                                        <hr>		
-                                </ul>
-                    </div></div>
+                
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="margin:0% 25% 0% 25%">
             <ol class="carousel-indicators">
               <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -261,10 +247,9 @@ img{
                             <p>Check Your Weather here</p>
     
     <p><strong><a href="weather.html">Click here</a></strong>...</p>					</div>
-    <div class="focus-news-feilds">
-        <p>Weather Report of Last one year across district.</p>
+    <!--<p>Weather Report of Last one year across district.</p>
 <p><a href="#" xss="removed"><b>Read More..</b></a></p>
-<p> </p>					</div>
+<p> </p>					</div> -->
 </div></marquee>
         <form action = "homelogin.php" method = "post">          
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -324,7 +309,9 @@ img{
        
             <div class="col-4">
                 <p style="color: black;"><strong>REGISTRATION GUIDELINES</strong><br />
-                    Farmers can visit to nearest Meeseva,Internet centre to register for Online Agriculture Market and follow guidelines.Buyers and Traders must visit Agriculture MArket to register for online Agriculture Market.</p>
+                Farmers and Traders must visit the nearest market to register in the portal.
+                Farmers and Buyers are requested to carry neccessary documents to register. Once the verification is done, the sms will be 
+            sent to their mobilenumbers and email id with username and password to login to the system.</p>
             </div>
         </div>
         </div>

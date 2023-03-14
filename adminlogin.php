@@ -1,4 +1,6 @@
-<?php include 'connection.php';?>
+<?php 
+    include 'connection.php';
+?>
 <?php
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
@@ -11,6 +13,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
     {
         session_start();
         $_SESSION['auth']='true';
+        $_SESSION['adminusername'] = $username;
         header('location:admindashboard.php');
     }
     else{
